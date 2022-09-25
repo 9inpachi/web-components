@@ -1,1 +1,1 @@
-import './components/components/component';
+import './components/component/component';
