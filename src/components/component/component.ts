@@ -24,9 +24,22 @@ export abstract class Component extends HTMLElement {
   }
 
   private processTemplate() {
+    let processedTemplate: string;
+
+    try {
+      processedTemplate = new Function(
+        ...Object.getOwnPropertyNames(this),
+        `return \`${this.template}\`;`,
+      )(...Object.values(this));
+    } catch (error) {
+      throw new Error(
+        ['Unable to process HTML template', this.template, error].join('\n\n'),
+      );
+    }
+
     const fragment = document
       .createRange()
-      .createContextualFragment(`${this.template}`);
+      .createContextualFragment(processedTemplate);
 
     return fragment;
   }

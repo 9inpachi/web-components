@@ -34,7 +34,8 @@ const config: Configuration = {
         },
       },
       {
-        test: /\.tmpl$/,
+        test: /\.html$/,
+        exclude: path.resolve(__dirname, './public/index.html'),
         type: 'asset/source',
       },
     ],
