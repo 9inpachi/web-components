@@ -24,9 +24,10 @@ export abstract class Component extends HTMLElement {
   }
 
   private processTemplate() {
-    const element = new Element();
-    element.innerHTML = `\`${this.template}\``;
+    const fragment = document
+      .createRange()
+      .createContextualFragment(`${this.template}`);
 
-    return element;
+    return fragment;
   }
 }

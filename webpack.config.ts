@@ -27,12 +27,15 @@ const config: Configuration = {
         },
       },
       {
-        test: /\.(jpe?g|png|gif|gltf|obj|fbx)$/,
-        loader: 'file-loader',
-        options: {
-          name: '[folder]/[name].[ext]',
-          outputPath: 'assets',
+        test: /\.(jpe?g|png|gif|css)$/,
+        type: 'asset/resource',
+        generator: {
+          filename: 'assets/[file]',
         },
+      },
+      {
+        test: /\.tmpl$/,
+        type: 'asset/source',
       },
     ],
   },
