@@ -11,8 +11,8 @@ export abstract class Component extends HTMLElement {
 
     this.shadowDOM = this.attachShadow({ mode: 'open' });
 
-    this.shadowDOM.appendChild(this.processStyles());
-    this.shadowDOM.appendChild(this.processTemplate());
+    this.styles && this.shadowDOM.appendChild(this.processStyles());
+    this.template && this.shadowDOM.appendChild(this.processTemplate());
   }
 
   private processStyles() {
