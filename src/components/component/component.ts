@@ -11,8 +11,10 @@ export abstract class Component extends HTMLElement {
 
     this.shadowDOM = this.attachShadow({ mode: 'open' });
 
-    this.styles && this.shadowDOM.appendChild(this.processStyles());
-    this.template && this.shadowDOM.appendChild(this.processTemplate());
+    setTimeout(() => {
+      this.styles && this.shadowDOM.appendChild(this.processStyles());
+      this.template && this.shadowDOM.appendChild(this.processTemplate());
+    });
   }
 
   private processStyles() {
@@ -23,14 +25,17 @@ export abstract class Component extends HTMLElement {
     return link;
   }
 
-  private processTemplate() {
+  protected processTemplate() {
     let processedTemplate: string;
 
     try {
+      const properties = Object.getOwnPropertyNames(this);
+      const values = Object.values(this);
+
       processedTemplate = new Function(
-        ...Object.getOwnPropertyNames(this),
+        ...properties,
         `return \`${this.template}\`;`,
-      )(...Object.values(this));
+      ).apply(this, ...values);
     } catch (error) {
       throw new Error(
         ['Unable to process HTML template', this.template, error].join('\n\n'),
