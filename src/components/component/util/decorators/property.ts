@@ -6,11 +6,14 @@ export const property = (definedName?: string): PropertyDecorator => {
       definedName ?? camelCaseToKebabCase(propertyKey.toString());
 
     const descriptor: PropertyDescriptor = {
-      get(this: Element) {
+      get(this: HTMLElement) {
         return this.getAttribute(propertyName);
       },
-      set(this: Element, value: string) {
-        this.setAttribute(propertyName, value);
+      set(this: HTMLElement, value: string) {
+        // Only allow setting the value of property if there is no attribute.
+        if (!this.getAttribute(propertyName)) {
+          this.setAttribute(propertyName, value);
+        }
       },
     };
 
@@ -38,8 +41,7 @@ const currentProperty = (
 ) => {
   return {
     kind: 'field',
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    key: (target as any)?.key,
+    key: target?.key,
     placement: 'own',
     descriptor,
   };

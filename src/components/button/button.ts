@@ -8,7 +8,7 @@ import buttonStyles from './button.css';
 @styles(buttonStyles)
 export class Button extends Component {
   @property()
-  test!: string;
+  test = 'default';
 
   constructor() {
     super();
