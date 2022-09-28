@@ -1,5 +1,5 @@
 import { Component } from '../component/component';
-import { styles, template } from '../component/util/decorators';
+import { property, styles, template } from '../component/util/decorators';
 
 import buttonTemplate from './button.html';
 import buttonStyles from './button.css';
@@ -7,13 +7,12 @@ import buttonStyles from './button.css';
 @template(buttonTemplate)
 @styles(buttonStyles)
 export class Button extends Component {
+  @property()
+  test!: string;
+
   constructor() {
     super();
-    this.addEventListener('click', this.onClick.bind(this));
-  }
-
-  onClick() {
-    console.log('Hello world');
+    console.log(this.test);
   }
 }
 
