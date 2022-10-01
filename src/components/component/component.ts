@@ -6,6 +6,8 @@ export interface Component {
 export abstract class Component extends HTMLElement {
   private shadowDOM: ShadowRoot;
 
+  protected init?(): void;
+
   constructor() {
     super();
 
@@ -14,6 +16,7 @@ export abstract class Component extends HTMLElement {
     setTimeout(() => {
       this.styles && this.shadowDOM.appendChild(this.processStyles());
       this.template && this.shadowDOM.appendChild(this.processTemplate());
+      this.init?.();
     });
   }
 
@@ -47,5 +50,9 @@ export abstract class Component extends HTMLElement {
       .createContextualFragment(processedTemplate);
 
     return fragment;
+  }
+
+  protected getElement(name: string): HTMLElement | null {
+    return this.shadowDOM.querySelector(`*[\\:${name}]`);
   }
 }

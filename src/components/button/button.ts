@@ -10,9 +10,8 @@ export class Button extends Component {
   @property()
   test = 'default';
 
-  constructor() {
-    super();
-    console.log(this.test);
+  init() {
+    this.getElement('myButton')?.addEventListener('click', console.log);
   }
 }
 

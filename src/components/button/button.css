@@ -1,3 +1,12 @@
-.test {
-  test: 'test';
+.button {
+  padding: 0.5rem 1rem;
+  background: white;
+  border: 1px solid black;
+  color: black;
+  cursor: pointer;
+}
+
+.button:hover {
+  background: black;
+  color: white;
 }
