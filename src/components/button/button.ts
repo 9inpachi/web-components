@@ -11,7 +11,12 @@ export class Button extends Component {
   test = 'default';
 
   init() {
-    this.getElement('myButton')?.addEventListener('click', console.log);
+    this.getElement('myButton')?.addEventListener('click', this.onClick);
+  }
+
+  onClick(event: MouseEvent) {
+    console.log(event);
+    console.log(this, this.getAttribute('class'));
   }
 }
 

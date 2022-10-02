@@ -1,3 +1,6 @@
+import { HTMLParser } from '../../core/html-parser/html-parser';
+import { IHTMLParser } from '../../core/html-parser/ihtml-parser';
+
 export interface Component {
   template: string;
   styles: string;
@@ -5,19 +8,23 @@ export interface Component {
 
 export abstract class Component extends HTMLElement {
   private shadowDOM: ShadowRoot;
+  private htmlParser!: IHTMLParser;
 
   protected init?(): void;
 
   constructor() {
     super();
-
     this.shadowDOM = this.attachShadow({ mode: 'open' });
+    setTimeout(() => this.lazyConstructor());
+  }
 
-    setTimeout(() => {
-      this.styles && this.shadowDOM.appendChild(this.processStyles());
-      this.template && this.shadowDOM.appendChild(this.processTemplate());
-      this.init?.();
-    });
+  // The lazy constructor is used in `setTimeout` because
+  // that's when we can access the child's properties through `this`.
+  private lazyConstructor() {
+    this.htmlParser = new HTMLParser(this.template, this);
+    this.styles && this.shadowDOM.appendChild(this.processStyles());
+    this.template && this.shadowDOM.appendChild(this.processTemplate());
+    this.init?.();
   }
 
   private processStyles() {
@@ -29,27 +36,9 @@ export abstract class Component extends HTMLElement {
   }
 
   protected processTemplate() {
-    let processedTemplate: string;
+    this.htmlParser.processEventListeners();
 
-    try {
-      const properties = Object.getOwnPropertyNames(this);
-      const values = Object.values(this);
-
-      processedTemplate = new Function(
-        ...properties,
-        `return \`${this.template}\`;`,
-      ).apply(this, ...values);
-    } catch (error) {
-      throw new Error(
-        ['Unable to process HTML template', this.template, error].join('\n\n'),
-      );
-    }
-
-    const fragment = document
-      .createRange()
-      .createContextualFragment(processedTemplate);
-
-    return fragment;
+    return this.htmlParser.getRootElement() as Element;
   }
 
   protected getElement(name: string): HTMLElement | null {
