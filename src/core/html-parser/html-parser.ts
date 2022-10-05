@@ -49,10 +49,6 @@ export class HTMLParser implements IHTMLParser {
     rootElement && addEventListenersToNodes(rootElement);
   }
 
-  getAttributesMap(): { [key: string]: string } {
-    throw new Error('Method not implemented.');
-  }
-
   getRootElement(): Element | null {
     return this.parsedFragment.firstElementChild;
   }
