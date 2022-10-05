@@ -1,4 +1,4 @@
 export interface IHTMLParser {
   processEventListeners(): void;
-  getRootElement(): Element | null;
+  getRootElements(): Element[];
 }

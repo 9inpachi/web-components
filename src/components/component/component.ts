@@ -26,7 +26,7 @@ export abstract class Component extends HTMLElement {
     this.htmlParser = new HTMLParser(evaluatedTemplate, this);
 
     this.styles && this.shadowDOM.appendChild(this.processStyles());
-    this.template && this.shadowDOM.appendChild(this.processTemplate());
+    this.template && this.shadowDOM.append(...this.processTemplate());
 
     this.init?.();
   }
@@ -42,7 +42,7 @@ export abstract class Component extends HTMLElement {
   protected processTemplate() {
     this.htmlParser.processEventListeners();
 
-    return this.htmlParser.getRootElement() as Element;
+    return this.htmlParser.getRootElements();
   }
 
   protected getElement(name: string): HTMLElement | null {

@@ -6,21 +6,25 @@ const eventPrefix = 'on:';
 export class HTMLParser implements IHTMLParser {
   private parsedFragment: DocumentFragment;
 
-  constructor(htmlString: string, private componentContext: Component) {
+  constructor(htmlTemplate: string, private componentContext: Component) {
     const parser = new DOMParser();
-    const parsedHTML = parser.parseFromString(htmlString, 'text/html');
+    const parsedHTML = parser.parseFromString(htmlTemplate, 'text/html');
     const body = parsedHTML.querySelector('body');
     this.parsedFragment = document.createDocumentFragment();
 
     if (body) {
-      for (const child of body.children) {
+      for (const child of [...body.children]) {
         this.parsedFragment.appendChild(child);
       }
     }
   }
 
+  /**
+   * Event listeners processed here execute in the context
+   * of the component which the template belongs to.
+   */
   processEventListeners() {
-    const rootElement = this.getRootElement();
+    const rootElements = this.getRootElements();
 
     const addEventListenersToNodes = (node: Element) => {
       for (const attribute of node.getAttributeNames()) {
@@ -46,10 +50,10 @@ export class HTMLParser implements IHTMLParser {
       }
     };
 
-    rootElement && addEventListenersToNodes(rootElement);
+    rootElements.forEach(addEventListenersToNodes);
   }
 
-  getRootElement(): Element | null {
-    return this.parsedFragment.firstElementChild;
+  getRootElements(): Element[] {
+    return [...this.parsedFragment.children];
   }
 }
