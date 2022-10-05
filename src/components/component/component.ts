@@ -1,5 +1,6 @@
 import { HTMLParser } from '../../core/html-parser/html-parser';
 import { IHTMLParser } from '../../core/html-parser/ihtml-parser';
+import { evaluateStringTemplate } from './util/string';
 
 export interface Component {
   template: string;
@@ -21,9 +22,12 @@ export abstract class Component extends HTMLElement {
   // The lazy constructor is used in `setTimeout` because
   // that's when we can access the child's properties through `this`.
   private lazyConstructor() {
-    this.htmlParser = new HTMLParser(this.template, this);
+    const evaluatedTemplate = evaluateStringTemplate(this.template, this);
+    this.htmlParser = new HTMLParser(evaluatedTemplate, this);
+
     this.styles && this.shadowDOM.appendChild(this.processStyles());
     this.template && this.shadowDOM.appendChild(this.processTemplate());
+
     this.init?.();
   }
 
