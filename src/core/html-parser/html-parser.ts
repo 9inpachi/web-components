@@ -1,6 +1,8 @@
 import { Component } from '../../components/component/component';
 import { IHTMLParser } from './ihtml-parser';
 
+const eventPrefix = 'on:';
+
 export class HTMLParser implements IHTMLParser {
   private parsedFragment: DocumentFragment;
 
@@ -22,13 +24,18 @@ export class HTMLParser implements IHTMLParser {
 
     const addEventListenersToNodes = (node: Element) => {
       for (const attribute of node.getAttributeNames()) {
-        if (attribute.startsWith('on:')) {
+        if (attribute.startsWith(eventPrefix)) {
           const eventListener = node.getAttribute(attribute);
 
           if (eventListener) {
             node.addEventListener(
-              attribute.substring(3),
-              new Function(eventListener).bind(this.componentContext),
+              attribute.substring(eventPrefix.length),
+              // Evaluate the wrapper function (`new Function`) in component's context
+              // to return the right value of `this.onClick`.
+              // And then make the listener run in the component's context.
+              new Function(`return ${eventListener}`)
+                .apply(this.componentContext)
+                .bind(this.componentContext),
             );
           }
         }
