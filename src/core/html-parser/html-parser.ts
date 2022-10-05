@@ -1,4 +1,5 @@
 import { Component } from '../../components/component/component';
+import { allEvents } from '../../components/component/util/events';
 import { IHTMLParser } from './ihtml-parser';
 
 const eventPrefix = 'on:';
@@ -29,19 +30,19 @@ export class HTMLParser implements IHTMLParser {
     const addEventListenersToNodes = (node: Element) => {
       for (const attribute of node.getAttributeNames()) {
         if (attribute.startsWith(eventPrefix)) {
+          const eventName = this.getEventName(attribute);
           const eventListener = node.getAttribute(attribute);
+          if (!eventListener) continue;
 
-          if (eventListener) {
-            node.addEventListener(
-              attribute.substring(eventPrefix.length),
-              // Evaluate the wrapper function (`new Function`) in component's context
-              // to return the right value of `this.onClick`.
-              // And then make the listener run in the component's context.
-              new Function(`return ${eventListener}`)
-                .apply(this.componentContext)
-                .bind(this.componentContext),
-            );
-          }
+          node.addEventListener(
+            eventName,
+            // Evaluate the wrapper function (`new Function`) in component's context
+            // to return the right value of `this.onClick`.
+            // And then make the listener run in the component's context.
+            new Function(`return ${eventListener}`)
+              .apply(this.componentContext)
+              .bind(this.componentContext),
+          );
         }
 
         for (const child of node.children) {
@@ -55,5 +56,15 @@ export class HTMLParser implements IHTMLParser {
 
   getRootElements(): Element[] {
     return [...this.parsedFragment.children];
+  }
+
+  private getEventName(attributeName: string): string {
+    const eventName = attributeName.substring(eventPrefix.length);
+
+    if (!allEvents.has(eventName)) {
+      throw new Error(`The specified event "${eventName}" is invalid.`);
+    }
+
+    return eventName;
   }
 }
