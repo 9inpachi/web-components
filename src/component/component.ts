@@ -1,5 +1,5 @@
-import { HTMLParser } from '../../core/html-parser/html-parser';
-import { IHTMLParser } from '../../core/html-parser/ihtml-parser';
+import { HTMLParser } from '../html-parser/html-parser';
+import { IHTMLParser } from '../html-parser/ihtml-parser';
 import { evaluateStringTemplate } from './util/string';
 
 export interface Component {
