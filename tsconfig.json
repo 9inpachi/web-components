@@ -13,5 +13,5 @@
     "experimentalDecorators": true,
     "useDefineForClassFields": false
   },
-  "include": ["src"]
+  "include": ["web-components", "examples"]
 }

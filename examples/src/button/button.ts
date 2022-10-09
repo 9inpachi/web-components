@@ -1,5 +1,5 @@
-import { Component } from '../../component/component';
-import { template, styles, property } from '../../component/util/decorators';
+import { Component } from 'web-components';
+import { template, styles, property } from 'web-components';
 
 import buttonTemplate from './button.html';
 import buttonStyles from './button.css';

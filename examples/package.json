@@ -1,0 +1,16 @@
+{
+  "name": "examples",
+  "version": "0.0.0",
+  "description": "Examples of web-components.",
+  "repository": "git@github.com:9inpachi/web-components.git",
+  "author": "Fawad Ali <m.fawaadali98@gmail.com>",
+  "license": "MIT",
+  "private": true,
+  "scripts": {
+    "start": "webpack serve",
+    "build": "rm -rf ./dist && webpack --mode production"
+  },
+  "dependencies": {
+    "web-components": "*"
+  }
+}
