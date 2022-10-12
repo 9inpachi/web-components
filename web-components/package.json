@@ -1,6 +1,6 @@
 {
-  "name": "web-components",
-  "version": "0.0.0",
+  "name": "@9inpachi/web-components",
+  "version": "1.0.0",
   "description": "A library for creating web components.",
   "repository": "git@github.com:9inpachi/web-components.git",
   "author": "Fawad Ali <m.fawaadali98@gmail.com>",
