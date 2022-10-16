@@ -27,14 +27,14 @@ const config: Configuration = {
         },
       },
       {
-        test: /\.(jpe?g|png|gif|css)$/,
+        test: /\.(jpe?g|png|gif)$/,
         type: 'asset/resource',
         generator: {
           filename: 'assets/[file]',
         },
       },
       {
-        test: /\.html$/,
+        test: /\.(html|css)$/,
         exclude: path.resolve(__dirname, './public/index.html'),
         type: 'asset/source',
       },
