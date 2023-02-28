@@ -11,17 +11,17 @@ export abstract class Component extends HTMLElement {
   protected shadowDOM: ShadowRoot;
   private htmlParser!: IHTMLParser;
 
+  protected onBeforeInit?(): void;
   protected onInit?(): void;
 
   constructor() {
     super();
     this.shadowDOM = this.attachShadow({ mode: 'open' });
-    setTimeout(() => this.lazyConstructor());
   }
 
-  // The lazy constructor is used in `setTimeout` because
-  // that's when we can access the child's properties through `this`.
-  private lazyConstructor() {
+  protected connectedCallback(): void {
+    this.onBeforeInit?.();
+
     const evaluatedTemplate = evaluateStringTemplate(this.template, this);
     this.htmlParser = new HTMLParser(evaluatedTemplate, this);
 
